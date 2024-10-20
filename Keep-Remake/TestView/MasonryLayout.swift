@@ -120,7 +120,10 @@ struct MasonryLayout : View {
                 ForEach(columns){ column in
                     LazyVStack(spacing: spacing) {
                         ForEach(column.gridItems){ gridItem in
-                            getItemView(data:gridItem)
+                            NavigationLink(destination: DetailPage(itemData: gridItem))
+                            {
+                                Test_Item(data:gridItem)
+                            }
                         }
                     }
                 }
@@ -134,20 +137,9 @@ struct MasonryLayout : View {
                     
                 }
                 
-                            }
+            }
         }
-    
-    }
-      
-    
-    func getItemView(data: ItemData)-> some View
-    {
-//        Image(gridItem.imgString)
-//            .resizable()
-//            .scaledToFit()
-//            .clipShape(RoundedRectangle(cornerRadius: 13))
         
-        GridItem(data:data)
     }
     
     

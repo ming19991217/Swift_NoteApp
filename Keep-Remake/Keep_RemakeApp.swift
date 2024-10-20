@@ -11,9 +11,8 @@ import SwiftUI
 struct Keep_RemakeApp: App {
     var body: some Scene {
         WindowGroup {
-            MainView()
+            HomeView()
         }
     }
 }
-
 
