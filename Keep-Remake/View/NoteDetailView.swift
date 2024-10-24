@@ -5,10 +5,12 @@ struct NoteDetailView: View {
     
     @ObservedObject var viewModel: NoteViewModel
     var note: Note
+    
     @State private var title :String
     @State private var content:String
     
-    init(note:Note,viewModel:NoteViewModel)
+    
+    init(note:Note,viewModel:NoteViewModel , isFirstEdit:Bool )
     {
         self.note = note
         self.viewModel = viewModel
@@ -16,34 +18,29 @@ struct NoteDetailView: View {
         _content = State(initialValue: note.content)
     }
     
+    
     var body: some View {
+        TextField("Empty Title", text: $title)
+            .padding(0)
+            .background(Color.clear)
+            .border(Color.clear, width: 0)
+            .font(.largeTitle)
+            .fontWeight(.bold)
+            .foregroundColor(.primary)
+            .padding(.horizontal,20)
+            .onChange(of: title, { oldValue, newValue in
+                viewModel.updateNote(note: note, title: newValue, content: content)
+            } )
+        
         VStack {
-            Form {
-                Section(header: Text("Title").font(.headline)) {
-                    TextField("Enter title", text: $title)
-                        .padding()
-                        .cornerRadius(8)
-                        .onChange(of: title, {  oldValue, newValue in
-                            viewModel.updateNote(note: note, title: newValue, content: content)
-                        })
-                }
-                
-                Section(header: Text("Content").font(.headline)) {
-                    TextEditor(text: $content)
-                        .padding(.vertical,5)
-                        .cornerRadius(8)
-                        .frame(minHeight: 300)
-                        .onChange(of: content ,{ oldValue, newValue in
-                            viewModel.updateNote(note: note, title: title, content: newValue)
-                        } )
-                }
-            }
-            .background(Color(UIColor.systemBackground))
-        
+            TextEditor(text: $content)
+                .cornerRadius(8)
+                .frame(minHeight: 200)
+                .onChange(of: content ,{ oldValue, newValue in
+                    viewModel.updateNote(note: note, title: title, content: newValue)
+                })
+                .padding(.horizontal,20)
         }
-        .navigationTitle(title)
-     
-        
     }
 }
 

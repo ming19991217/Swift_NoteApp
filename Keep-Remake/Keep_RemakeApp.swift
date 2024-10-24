@@ -11,8 +11,13 @@ import SwiftUI
 struct Keep_RemakeApp: App {
     var body: some Scene {
         WindowGroup {
-            HomeView()
+            ZStack{
+                Color.black.ignoresSafeArea()
+                HomeView()
+            }
         }
+       
+        
     }
 }
 

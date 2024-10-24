@@ -40,6 +40,11 @@ class NoteViewModel: ObservableObject {
         }
     }
     
+    func clearNotes()
+    {
+        notes.removeAll()
+    }
+    
     
     
     

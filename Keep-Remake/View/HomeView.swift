@@ -4,6 +4,8 @@ import SwiftUI
 struct HomeView: View {
     @ObservedObject var viewModel = NoteViewModel()
     
+    @State private var isPresented: Bool = false
+    
     var body: some View {
         NavigationView(content: {
             VStack{
@@ -20,15 +22,23 @@ struct HomeView: View {
                     Spacer()
                 }
                 ToolbarItem(placement: .bottomBar){
-                    NavigationLink(destination: AddNoteView(viewModel: viewModel))
-                    {
+                    Button{
+                        isPresented = true
+                    } label: {
                         Image(systemName: "plus")
                             .imageScale(.medium)
                             .font(.title)
                     }
+                    
                 }
             }
+            .sheet(isPresented: $isPresented, content: {
+                AddNoteView(viewModel: viewModel)
+                    .presentationDragIndicator(.visible) // 顯示拉條
+            })
         })
+        
+        
     }
     
     func EmptyView() -> some View {
@@ -39,7 +49,7 @@ struct HomeView: View {
                 .frame(width: 70, height: 70)
                 .foregroundColor(.gray)
             
-            Text("No notes yet!")
+            Text("No notes yet")
                 .font(.title)
                 .fontWeight(.semibold)
                 .foregroundColor(.gray)

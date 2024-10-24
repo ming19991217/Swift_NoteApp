@@ -31,9 +31,16 @@ struct LayoutView: View {
                     LazyVStack(alignment: .leading, spacing: spacing){
                         ForEach(columns[index]){ note in
                             
-                            NavigationLink(destination: NoteDetailView(note: note, viewModel: viewModel))
+                            NavigationLink(destination: NoteDetailView(note: note, viewModel: viewModel,isFirstEdit: false))
                             {
-                                GetItemView(note: note)
+                                NoteItemView(note: note)
+                                    .contextMenu{
+                                        Button (role:.destructive ){
+                                            viewModel.deleteNote(note: note)
+                                        } label: {
+                                            Label("Delete", systemImage: "trash")
+                                        }
+                                    }
                             }
                             
                         }
@@ -66,8 +73,13 @@ struct LayoutView: View {
         return distributedItems
     }
     
-    func GetItemView(note: Note) -> some View {
-        
+}
+
+struct NoteItemView : View{
+    
+    var note: Note
+    
+    var body: some View{
         VStack(alignment: .leading, spacing: 8) {
             
             //               Image(note.imgString)
@@ -94,17 +106,7 @@ struct LayoutView: View {
         .padding()
         .background(Color(UIColor.secondarySystemBackground))
         .cornerRadius(10)
-        .contextMenu{
-            Button (role:.destructive ){
-                viewModel.deleteNote(note: note)
-            } label: {
-                Label("Delete", systemImage: "trash")
-            }
-        } 
     }
-  
-    
-    
 }
 
 #Preview {

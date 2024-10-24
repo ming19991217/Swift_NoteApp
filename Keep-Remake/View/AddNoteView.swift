@@ -2,38 +2,79 @@ import SwiftUI
 
 struct AddNoteView: View {
     
-    @Environment(\.dismiss) var dismiss
+    @Environment(\.presentationMode) var presentationMode
     @ObservedObject var viewModel: NoteViewModel
-    @State private var title: String = "New Note"
+    @State private var title: String = ""
     @State private var content: String = ""
     
+    @FocusState private var focus : FocusedField?
+    
+    
+    
     var body: some View {
+        
         VStack {
-            Form {
-                Section(header: Text("Title").font(.headline)) {
-                    TextField("Enter title", text: $title)
-                        .padding()
-                        .cornerRadius(8)
+            
+            TextField("Enter title", text: $title)
+                .submitLabel(.next)
+                .focused($focus,equals: .title)
+                .lineLimit(1)
+                .frame(height: 50)
+                .padding(0)
+                .background(Color.clear)
+                .border(Color.clear, width: 0)
+                .font(.largeTitle)
+                .fontWeight(.bold)
+                .foregroundColor(.primary)
+                .padding(.horizontal,20)
+                .padding(.top,20)
+                .onSubmit {
+                    focus = .content
                 }
-                
-                Section(header: Text("Content").font(.headline)) {
-                    TextEditor(text: $content)
-                        .padding(.vertical,5)
-                        .cornerRadius(8)
-                        .frame(minHeight: 200)
-                }
+            VStack {
+                TextEditor(text: $content)
+                    .focused($focus,equals: .content)
+                    .cornerRadius(8)
+                    .frame(minHeight: 100)
+                    .padding(.horizontal,20)
+                    .onChange(of: content) {oldValue, newValue in
+                        if newValue.isEmpty {
+                            focus = .title
+                        }
+                    }
             }
-            .background(Color(UIColor.systemBackground))
+            
+            Button{
+                viewModel.addNote(title: title, content: content)
+                presentationMode.wrappedValue.dismiss()
+            } label: {
+                Text("Done")
+                    .frame(width:150,height: 10)
+                    .font(.headline)
+                    .fontWeight(.bold)
+                    .padding()
+                    .background(Color.white)
+                    .foregroundColor(.black)
+                    .cornerRadius(8)
+            }
+            
         }
-        .navigationTitle(title)
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button("Save"){
-                    viewModel.addNote(title: title, content: content)
-                    dismiss()
-                }
+        .padding(20)
+        .onAppear{
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5){
+                focus = .title
             }
         }
+        
+        
     }
-  
+    
+    enum FocusedField:Hashable{
+        case title,content
+    }
+    
+}
+
+#Preview {
+    HomeView()
 }
