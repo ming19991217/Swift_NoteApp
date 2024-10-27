@@ -53,8 +53,8 @@ struct AddNoteView: View {
                     .font(.headline)
                     .fontWeight(.bold)
                     .padding()
-                    .background(Color.white)
-                    .foregroundColor(.black)
+                    .background(Color.primary)
+                    .foregroundColor(Color(UIColor.secondarySystemBackground))
                     .cornerRadius(8)
             }
             

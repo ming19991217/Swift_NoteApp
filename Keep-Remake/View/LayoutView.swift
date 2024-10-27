@@ -12,7 +12,7 @@ struct LayoutView: View {
     @ObservedObject var viewModel: NoteViewModel
     var notes: [Note]
     
-    let spacing: CGFloat = 10
+    let spacing: CGFloat = 8
     let columnCount: Int = 2
     
     
@@ -82,23 +82,18 @@ struct NoteItemView : View{
     var body: some View{
         VStack(alignment: .leading, spacing: 8) {
             
-            //               Image(note.imgString)
-            //                   .resizable()
-            //                   .scaledToFill()
-            //                   .frame(height: 150)
-            //                   .clipShape(RoundedRectangle(cornerRadius: 13))
-            //                   .clipped()
-            
             Text(note.title)
-                .foregroundStyle(Color(UIColor.label))
+                .foregroundStyle(Color.primary)
                 .font(.headline)
                 .fontWeight(.bold)
+                .lineLimit(2) // 限制標題最多顯示兩行
                 .multilineTextAlignment(.leading)
             
             Text(note.content)
-                .foregroundStyle(Color(UIColor.secondaryLabel))
-                .font(.body)
-                .lineLimit(nil) // 不限制行數
+                .foregroundStyle(Color.primary.opacity(0.8))
+                .lineSpacing(4) // 增加行間距
+                .lineLimit(8) // 限制最多顯示五行文字
+                .font(.caption)
                 .multilineTextAlignment(.leading)
             
         }
